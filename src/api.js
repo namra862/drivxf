@@ -1,11 +1,7 @@
-import axios from "axios";
+import axios from 'axios';
 
-// Dynamically set baseURL depending on environment
 const API = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://drivx.onrender.com/api" // deployed backend
-      : "http://localhost:5000/api",     // local backend
+  baseURL: process.env.REACT_APP_API_URL || 'https://drivx.onrender.com/api',
   timeout: 120000,
 });
 

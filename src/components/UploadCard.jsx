@@ -10,6 +10,9 @@ export default function UploadCard() {
   const [result, setResult] = useState(null);
   const inputRef = useRef();
 
+  // ✅ Always point to backend (Render)
+  const BACKEND_URL = "https://drivx.onrender.com";
+
   const onDrop = (e) => {
     e.preventDefault();
     const f = e.dataTransfer.files?.[0];
@@ -33,19 +36,22 @@ export default function UploadCard() {
         },
       });
 
-      setResult(res.data); // ✅ backend already sends { shortUrl, token, ... }
+      const data = res.data;
+      // ✅ Always build final link from backend
+      const shortUrl = `${BACKEND_URL}/d/${data.token}`;
+
+      setResult({ ...data, shortUrl });
       setProgress(0);
-      toast.success("Upload completed");
+      toast.success("Upload completed ✅");
     } catch (err) {
       console.error("Upload failed:", err);
-      toast.error("Upload failed");
+      toast.error("Upload failed ❌");
       setProgress(0);
     }
   };
 
   return (
     <div className="glass p-6 rounded-2xl shadow-lg">
-      {/* Upload area */}
       <div
         className="border-dashed border-2 border-gray-300 p-6 rounded-lg text-center cursor-pointer"
         onDragOver={(e) => e.preventDefault()}
@@ -74,7 +80,6 @@ export default function UploadCard() {
         </div>
       </div>
 
-      {/* Expiry + Upload button */}
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center">
           <label className="mr-3">Expiry:</label>
@@ -87,19 +92,19 @@ export default function UploadCard() {
             <option value="1d">1 day</option>
           </select>
         </div>
+
         <button
           onClick={upload}
           className="relative px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 ease-in-out
-                     bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500
-                     shadow-lg hover:shadow-xl hover:shadow-purple-500/50
-                     focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500
-                     active:scale-95"
+                   bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500
+                   shadow-lg hover:shadow-xl hover:shadow-purple-500/50
+                   focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-purple-500
+                   active:scale-95"
         >
           Upload
         </button>
       </div>
 
-      {/* Progress bar */}
       {progress > 0 && (
         <div className="mt-4">
           <div className="h-2 w-full bg-gray-200 rounded">
@@ -112,7 +117,6 @@ export default function UploadCard() {
         </div>
       )}
 
-      {/* Result */}
       {result && (
         <div className="mt-4 p-4 bg-white rounded-lg shadow">
           <div className="flex justify-between items-center">
@@ -130,7 +134,7 @@ export default function UploadCard() {
                 className="mt-2 text-sm underline"
                 onClick={() => {
                   navigator.clipboard.writeText(result.shortUrl);
-                  toast.success("Copied link");
+                  toast.success("Copied link 📋");
                 }}
               >
                 Copy link

@@ -8,7 +8,12 @@ import DashboardUI from "./pages/Dashboard";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <div className="min-h-screen">
         <nav className="p-4 flex justify-between items-center">
           <Link to="/" className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-600">Drive X</Link>
